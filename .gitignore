@@ -1,0 +1,13 @@
+# files
+
+.DS_Store
+*.css.map
+npm-debug.log
+
+#folders
+
+dist/
+cache/
+coverage/
+node_modules/
+stats/
