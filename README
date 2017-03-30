@@ -1,0 +1,9 @@
+# recipy
+App for creating, storing and sharing cooking recipes.
+
+## Tech stack
+- Docker
+- Webpack
+- node.js
+- MongoDB
+- Angular

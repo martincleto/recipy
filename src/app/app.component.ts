@@ -1,9 +1,9 @@
 import { Component } from '@angular/core';
-import '../assets/css/styles.css';
+import '../assets/sass/styles.scss';
 
 @Component({
   selector: 'my-app',
-  styleUrls: ['./app.component.css'],
+  styleUrls: ['./app.component.scss'],
   templateUrl: './app.component.html'
 })
 

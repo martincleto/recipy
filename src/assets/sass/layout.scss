@@ -1,0 +1,11 @@
+
+body {
+  background: $color-lightest;
+  color: $color-darkest;
+}
+
+/* Move following non-layout styles to corresponding file */
+
+.logo {
+  font-family: $font-branding;
+}

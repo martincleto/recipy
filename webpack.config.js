@@ -21,6 +21,23 @@ let baseConfig = {
   module: {
     rules: [
       {
+        test: /\.html$/,
+        use: 'html-loader'
+      },
+      {
+        test: /\.scss$/,
+        exclude: helpers.root('src', 'app'),
+        use: ExtractTextPlugin.extract({
+          fallback: 'style-loader',
+          use: 'css-loader?sourceMap!postcss-loader!sass-loader?sourceMap'
+        })
+      },
+      {
+        test: /\.scss$/,
+        include: helpers.root('src', 'app'),
+        use: ['to-string-loader', 'css-loader?sourceMap', 'postcss-loader', 'sass-loader?sourceMap']
+      },
+      {
         test: /\.ts$/,
         use: [
           {
@@ -28,29 +45,12 @@ let baseConfig = {
             options: {
               configFileName: helpers.root('./config', 'tsconfig.json')
             }
-          } , 'angular2-template-loader'
+          }, 'angular2-template-loader'
         ]
-      },
-      {
-        test: /\.html$/,
-        use: 'html-loader'
       },
       {
         test: /\.(png|jpe?g|gif|svg|woff|woff2|ttf|eot|ico)$/,
         use: 'file-loader?name=assets/[name].[hash].[ext]'
-      },
-      {
-        test: /\.css$/,
-        exclude: helpers.root('src', 'app'),
-        use: ExtractTextPlugin.extract({
-          fallback: 'style-loader',
-          loader: 'css-loader?sourceMap'
-        })
-      },
-      {
-        test: /\.css$/,
-        include: helpers.root('src', 'app'),
-        use: 'raw-loader'
       }
     ]
   },
@@ -67,6 +67,11 @@ let baseConfig = {
 
     new webpack.optimize.CommonsChunkPlugin({
       name: ['app', 'vendor', 'polyfills']
+    }),
+
+    new ExtractTextPlugin({
+      filename: 'css/styles.css?[hash]',
+      allChunks: true
     }),
 
     new HtmlWebpackPlugin({
