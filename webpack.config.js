@@ -1,6 +1,7 @@
 'use strict';
 
 const webpack = require('webpack');
+const autoprefixer = require('autoprefixer');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const merge = require('webpack-merge');
@@ -13,9 +14,9 @@ const env = process.env.NODE_ENV || 'development';
 let baseConfig = {
 
   entry: {
-    'polyfills': './src/polyfills.ts',
-    'vendor': './src/vendor.ts',
-    'app': './src/main.ts'
+    'polyfills': './src/client/polyfills.ts',
+    'vendor': './src/client/vendor.ts',
+    'app': './src/client/main.ts'
   },
 
   module: {
@@ -26,7 +27,7 @@ let baseConfig = {
       },
       {
         test: /\.scss$/,
-        exclude: helpers.root('src', 'app'),
+        exclude: helpers.root('src', 'client', 'app'),
         use: ExtractTextPlugin.extract({
           fallback: 'style-loader',
           use: 'css-loader?sourceMap!postcss-loader!sass-loader?sourceMap'
@@ -34,7 +35,7 @@ let baseConfig = {
       },
       {
         test: /\.scss$/,
-        include: helpers.root('src', 'app'),
+        include: helpers.root('src', 'client', 'app'),
         use: ['to-string-loader', 'css-loader?sourceMap', 'postcss-loader', 'sass-loader?sourceMap']
       },
       {
@@ -49,19 +50,33 @@ let baseConfig = {
         ]
       },
       {
-        test: /\.(png|jpe?g|gif|svg|woff|woff2|ttf|eot|ico)$/,
-        use: 'file-loader?name=assets/[name].[hash].[ext]'
+        test: /\.(png|jpe?g|gif|svg|ico)$/,
+        use: 'file-loader?name=assets/images/[name].[hash].[ext]'
+      },
+      {
+        test: /\.(woff|woff2|ttf|eot)$/,
+        use: 'file-loader?name=assets/fonts/[name].[hash].[ext]'
       }
     ]
   },
 
   plugins: [
+    new ExtractTextPlugin({
+      filename: 'css/styles.[hash].css',
+      allChunks: true
+    }),
+
+    new HtmlWebpackPlugin({
+      template: 'src/client/index.html',
+      favicon: 'src/client/assets/images/favicon.png'
+    }),
+
     // Workaround for angular/angular#11580
     new webpack.ContextReplacementPlugin(
       // The (\\|\/) piece accounts for path separators in *nix and Windows
       /* /angular(\\|\/)core(\\|\/)(esm(\\|\/)src|src)(\\|\/)linker/, */
       /angular(\\|\/)core(\\|\/)@angular/,  // https://github.com/angular/angular/issues/14898
-      helpers.root('./src'), // location of your src
+      helpers.root('./src/client'), // location of your src
       {} // a map of your routes
     ),
 
@@ -69,13 +84,13 @@ let baseConfig = {
       name: ['app', 'vendor', 'polyfills']
     }),
 
-    new ExtractTextPlugin({
-      filename: 'css/styles.css?[hash]',
-      allChunks: true
-    }),
-
-    new HtmlWebpackPlugin({
-      template: 'src/index.html'
+    new webpack.LoaderOptionsPlugin({
+      options: {
+        context: helpers.root('src', 'client', 'app'),
+        postcss: {
+          plugins: [autoprefixer]
+        }
+      }
     })
   ],
 
@@ -85,7 +100,6 @@ let baseConfig = {
 };
 
 // Config based on environment
-
 let envConfig = require(`./config/webpack.config.${env}.js`);
 
 module.exports = merge(baseConfig, envConfig);

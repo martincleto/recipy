@@ -27,13 +27,13 @@ module.exports = {
         loader: 'null-loader'
       },
       {
-        test: /\.css$/,
-        exclude: helpers.root('src', 'app'),
+        test: /\.scss$/,
+        exclude: helpers.root('src', 'client', 'app'),
         loader: 'null-loader'
       },
       {
-        test: /\.css$/,
-        include: helpers.root('src', 'app'),
+        test: /\.scss$/,
+        include: helpers.root('src', 'client', 'app'),
         loader: 'raw-loader'
       }
     ]
@@ -45,9 +45,9 @@ module.exports = {
       // The (\\|\/) piece accounts for path separators in *nix and Windows
       /* /angular(\\|\/)core(\\|\/)(esm(\\|\/)src|src)(\\|\/)linker/, */
       /angular(\\|\/)core(\\|\/)@angular/,  // https://github.com/angular/angular/issues/14898
-      helpers.root('./src'), // location of your src
+      helpers.root('./src/client'), // location of your src
       {} // a map of your routes
-    ),
+    )
   ],
 
   resolve: {

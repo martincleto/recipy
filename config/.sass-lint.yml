@@ -1,7 +1,7 @@
 files:
-  include: 'src/**/*.scss'
+  include: 'src/client/**/*.scss'
   ignore:
-    - 'src/sass/vendor/**/*.*'
+    - 'src/client/sass/vendor/**/*.*'
 options:
   formatter: stylish
   merge-default-rules: false

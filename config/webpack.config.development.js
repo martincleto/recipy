@@ -13,11 +13,6 @@ module.exports = {
     historyApiFallback: true,
     stats: 'minimal'
   },
-/*
-  plugins: [
-    new ExtractTextPlugin('[name].css')
-  ],
-*/
   output: {
     path: helpers.root('dist'),
     publicPath: 'http://localhost:8080/',
