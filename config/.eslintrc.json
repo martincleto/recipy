@@ -1,0 +1,27 @@
+{
+    "env": {
+        "node": true,
+        "jasmine": true
+    },
+    "extends": "eslint:recommended",
+    "globals": {
+      "ObjectId": false
+    },
+    "rules": {
+        "indent": [
+            "error",
+            2
+        ],
+        "linebreak-style": [
+            "error",
+            "unix"
+        ],
+        "quotes": [
+            "error",
+            "single"
+        ]
+    },
+    "parserOptions": {
+      "ecmaVersion": 6
+    }
+}

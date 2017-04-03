@@ -1,4 +1,6 @@
 import { Component } from '@angular/core';
+import { MdCardModule } from '@angular/material/card';
+
 import '../assets/images/favicon.png';
 import '../sass/styles.scss';
 

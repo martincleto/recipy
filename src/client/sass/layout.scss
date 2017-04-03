@@ -2,10 +2,33 @@
 body {
   background: $color-lightest;
   color: $color-darkest;
+  font-size: 16px;
 }
 
 /* Move following non-layout styles to corresponding file */
 
 .logo {
+  position: relative;
+  display: inline-block;
+  color: $color-primary;
   font-family: $font-branding;
+  font-size: 5rem;
+  font-style: oblique;
+  z-index: 1;
+
+  &:after {
+    content: 'recipy';
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    color: $color-lightest;
+    text-shadow: 1px 1px 1px rgba(0, 0, 0, .25);
+    z-index: -1;
+  }
+}
+
+.rcpy-icon {
+  display: block;
+  width: 40%;
+  margin: 0 auto 50px auto;
 }

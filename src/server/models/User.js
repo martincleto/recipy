@@ -6,7 +6,7 @@ const UserSchema = new Schema({
   pwd: String,
   token:   String,
   image: ObjectId,
-  lang: String
+  lang: String,
   since: { type: Date, default: Date.now },
   last_activity: Date
 });

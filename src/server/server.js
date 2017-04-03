@@ -14,4 +14,9 @@ app.get('/api', function (req, res) {
 
 app.listen(8765, function() {
   console.log('listening on 8765');
-})
+  app.emit('ready');
+});
+
+app.on('ready', function() {
+  console.log('ready event was fired!');
+});
