@@ -2,7 +2,6 @@
 
 const webpack = require('webpack');
 const autoprefixer = require('autoprefixer');
-const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const merge = require('webpack-merge');
 
@@ -19,6 +18,8 @@ let baseConfig = {
     'app': './src/client/main.ts'
   },
 
+  mode: env,
+
   module: {
     rules: [
       {
@@ -27,16 +28,18 @@ let baseConfig = {
       },
       {
         test: /\.scss$/,
-        exclude: helpers.root('src', 'client', 'app'),
-        use: ExtractTextPlugin.extract({
-          fallback: 'style-loader',
-          use: 'css-loader?sourceMap!postcss-loader!sass-loader?sourceMap'
-        })
-      },
-      {
-        test: /\.scss$/,
         include: helpers.root('src', 'client', 'app'),
-        use: ['to-string-loader', 'css-loader?sourceMap', 'postcss-loader', 'sass-loader?sourceMap']
+        use: [
+          'to-string-loader',
+          'css-loader?sourceMap',
+          {
+            loader: 'postcss-loader', options: {
+              plugins: (loader) => [
+              require('autoprefixer')(),
+              ]
+            }
+          },
+          'sass-loader?sourceMap']
       },
       {
         test: /\.ts$/,
@@ -60,12 +63,13 @@ let baseConfig = {
     ]
   },
 
-  plugins: [
-    new ExtractTextPlugin({
-      filename: 'css/styles.[hash].css',
-      allChunks: true
-    }),
+  optimization: {
+    splitChunks: {
+      name: true
+    }
+  },
 
+  plugins: [
     new HtmlWebpackPlugin({
       template: 'src/client/index.html',
       favicon: 'src/client/assets/images/favicon.png'
@@ -80,9 +84,9 @@ let baseConfig = {
       {} // a map of your routes
     ),
 
-    new webpack.optimize.CommonsChunkPlugin({
-      name: ['app', 'vendor', 'polyfills']
-    }),
+    // new webpack.optimize.CommonsChunkPlugin({
+    //   name: ['app', 'vendor', 'polyfills']
+    // }),
 
     new webpack.LoaderOptionsPlugin({
       options: {

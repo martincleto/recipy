@@ -3,7 +3,9 @@
 'use strict';
 
 const webpack = require('webpack');
-const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
+
 const helpers = require('./helpers');
 
 module.exports = {
@@ -16,14 +18,45 @@ module.exports = {
     chunkFilename: '[id].[hash].chunk.js'
   },
 
+  module: {
+    rules: [
+      {
+        test: /\.scss$/,
+        exclude: helpers.root('src', 'client', 'app'),
+        use: [
+          MiniCssExtractPlugin.loader,
+          'css-loader?sourceMap',
+          {
+            loader: 'postcss-loader',
+            options: {
+              plugins: (loader) => [
+                require('autoprefixer')(),
+              ]
+            }
+          },
+          'sass-loader?sourceMap']
+      }
+    ]
+  },
+
+  optimization: {
+    minimizer: [
+       new UglifyJsPlugin({
+         uglifyOptions: {
+           mangle: {
+             keep_fnames: true
+           }
+         }
+       })
+     ]
+  },
+
   plugins: [
     new webpack.NoEmitOnErrorsPlugin(),
-    new webpack.optimize.UglifyJsPlugin({ // https://github.com/angular/angular/issues/10618
-      mangle: {
-        keep_fnames: true
-      }
+    new MiniCssExtractPlugin({
+      filename: 'css/styles.[hash].css',
+      chunkFilename: "[id].css"
     }),
-    new ExtractTextPlugin('[name].[hash].css'),
     new webpack.LoaderOptionsPlugin({
       htmlLoader: {
         minimize: false // workaround for ng2
